@@ -1,0 +1,68 @@
+<div ng-controller="foodController">
+    <h1>FOOD LIST</h1>
+    Options:
+    <select ng-model="myOption">
+        <option value="searchAndSort">Search && Sort</option>
+        <option value="delete">Delete</option>
+        <option value="update">Update</option>
+    </select>
+   <table border="1">
+       <tr>
+           <th>ID</th>
+           <th>Name</th>
+           <th>Price</th>
+       </tr>
+       <tr ng-repeat="s in list|orderBy:myOrder|filter:mySearch">
+           <td>{{s.id}}</td>
+           <td>{{s.name}}</td>
+           <td>{{s.price}}</td>
+       </tr>
+   </table>
+   <div ng-show="myShowSearch">
+    Search:
+    <input type="text" ng-model="mySearch" placeholder="Search">
+    Sort by:
+    <select ng-model="myOrder">
+        <option value="id">ID</option>
+        <option value="name">Name</option>
+        <option value="price">Price</option>
+    </select>
+    </div>
+    <div ng-controller="deleteController" >
+        <div ng-show="myShowDelete">
+            DELETE FOOD BY ID:
+            <form name="myForm" ng-submit="remove(myID)">
+                <input type="text" name="myID" ng-model="myID" required>
+                <span class='error' ng-show="myForm.myID.$error.required && myForm.myID.$dirty">ID is required</span>
+                <br>
+                <input type="submit" ng-disabled="myForm.myID.$error.required && myForm.myID.$dirty">
+            </form>
+        </div>
+    </div>
+    <div ng-controller="updateController" >
+        <div ng-show="myShowUpdate">
+            UPDATE FOOD
+            <form name="myForm" ng-submit="update(myID)">
+                ID: <br>
+                <input type="text" name="myID" ng-model="myID" required>
+                <span class='error' ng-show="myForm.myID.$error.required && myForm.myID.$dirty">ID is required</span>
+                <br>
+                Name: 
+                <br>
+                <input type="text" name="myName" ng-model="myName" required>
+                <span class='error' ng-show="myForm.myName.$error.required && myForm.myName.$dirty">Name is required</span>
+                <br>
+                Price: 
+                <br>
+                <input type="text" name="myPrice" ng-model="myPrice" required>
+                <span class='error' ng-show="myForm.myPrice.$error.required && myForm.myPrice.$dirty">Price is required</span>
+                <br>
+                <input value="Update" type="submit" ng-disabled="myForm.myID.$error.required && myForm.myID.$dirty ||
+                                                myForm.myName.$error.required && myForm.myName.$dirty ||
+                                                myForm.myPrice.$error.required && myForm.myPrice.$dirty">
+            </form>
+        </div>
+    </div>
+</div>
+
+

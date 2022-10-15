@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="">
+    <title>Document</title>
+    <style>
+        #menu{
+            display: flex;
+            justify-content: space-around;
+            background-color: aqua;
+           
+          
+        }
+        #menu a{
+            text-decoration: none;
+            line-height: 30px;
+            height: 30px;
+        }
+        #content{
+            
+            text-align: center;
+        }
+
+        table{
+            margin: 0 auto;
+        }
+
+        .error{
+            color: red;
+        }
+    </style>
+</head>
+<body ng-app="myApp">
+    <div id="menu">
+        <a href="#/!">Home</a>
+        <a href="#!Product">Product</a>
+        <a href="#!addNewFood">Add New Food</a>
+        <a href="#!About">About</a>    
+    </div>
+  
+    <div ng-view id="content">
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.9/angular.min.js"></script>
+    <script  src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.9/angular-route.js"></script>
+    <script>
+    var app=angular.module('myApp',['ngRoute']);
+    app.config(function($routeProvider)
+    {
+        $routeProvider
+        .when("/",{
+            templateUrl:"./view/home.html"
+        })
+        .when("/Product",{
+            templateUrl:"./view/product.html"
+
+        })
+        .when("/addNewFood",{
+            templateUrl:"./view/addNewFood.html"
+
+        })
+        .when("/About",{
+            templateUrl:"./view/about.html"
+
+        });
+    })
+    app.run(function($rootScope,$http){
+        $http.get("data.json").then(function(response){
+            $rootScope.list=response.data.foodList;
+
+        })
+    })
+    app.controller('foodController',function($scope){
+        $scope.$watch('myOption', function() {  
+            if($scope.myOption=="searchAndSort"){
+                $scope.myShowSearch=true;
+                }else{
+                    $scope.myShowSearch=false;
+                }
+        });
+    })
+    app.controller("addController", function($scope){
+        $scope.add = function(){
+                //tao 1 doi tuong JSON, noi dung gia tri cac o input o form
+                var newFood = {"id": $scope.myID, "name": $scope.myName, "price": $scope.myPrice};
+                $scope.list.push(newFood);
+                alert("Add new food successfully");
+            }
+        })
+    app.controller('deleteController',function($scope){
+        $scope.remove = function(item) { 
+            var index=-1;
+            for(var i=0;i<$scope.list.length;i++){
+                if($scope.list[i].id==item){
+                    index=i;
+                }
+            }
+            if(index==-1){
+                alert("Can't find ID to delete");
+            }else{
+                $scope.list.splice(index, 1); 
+            }
+           
+        }
+        $scope.$watch('myOption', function() {  
+            if($scope.myOption=="delete"){
+                $scope.myShowDelete=true;
+            }else{
+                $scope.myShowDelete=false;
+            }
+        });
+    })
+    app.controller('updateController',function($scope){
+        $scope.update = function(item){
+            var index=-1;
+            for(var i=0;i<$scope.list.length;i++){
+                if($scope.list[i].id==item){
+                    index=i;
+                }
+            }
+            if(index==-1){
+                alert("Can't find ID to update");
+            }else{
+                var updateFood = {"id": $scope.myID, "name": $scope.myName, "price": $scope.myPrice}; 
+                $scope.list[index]=updateFood;
+    
+            }
+           
+        }
+        $scope.$watch('myOption', function() {  
+            if($scope.myOption=="update"){
+                $scope.myShowUpdate=true;
+            }else{
+                $scope.myShowUpdate=false;
+            }
+        });
+    })
+    </script>
+</body>
+</html>

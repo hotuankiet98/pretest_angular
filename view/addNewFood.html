@@ -1,0 +1,22 @@
+<div ng-controller="addController">
+    ADD NEW FOOD
+    <form name="myForm" ng-submit="add()">
+        ID: <br>
+        <input type="text" name="myID" ng-model="myID" required>
+        <span class='error' ng-show="myForm.myID.$error.required && myForm.myID.$dirty">ID is required</span>
+        <br>
+        Name: 
+        <br>
+        <input type="text" name="myName" ng-model="myName" required>
+        <span class='error' ng-show="myForm.myName.$error.required && myForm.myName.$dirty">Name is required</span>
+        <br>
+        Price: 
+        <br>
+        <input type="text" name="myPrice" ng-model="myPrice" required>
+        <span class='error' ng-show="myForm.myPrice.$error.required && myForm.myPrice.$dirty">Price is required</span>
+        <br>
+        <input value="Add" type="submit" ng-disabled="myForm.myID.$error.required && myForm.myID.$dirty ||
+                                        myForm.myName.$error.required && myForm.myName.$dirty ||
+                                        myForm.myPrice.$error.required && myForm.myPrice.$dirty">
+    </form>
+</div>
